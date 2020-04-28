@@ -1,0 +1,70 @@
+---
+title: "lab_red_0227"
+author: "xm"
+date: "February 27, 2020"
+output: html_document
+---
+```{r Setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+This document contains both instructions and processes needed to process HDDM self-reports data from REDcap. 
+
+Part 0: Table of Content
+*need to edit*
+
+Part 1: To-do list
+
+
+```{r Archive, include=FALSE}
+
+```
+
+
+
+```{r Loading, include=FALSE}
+#setup the environment: install related packages 
+
+#install.packages("dplyr")
+#install.packages("PerformanceAnalytics") #not available for R version 3.4.3
+#install.packages("ggplot2")
+#install.packages("tidyverse")
+#install.packages("stringr")
+#install.packages("naniar")
+
+library(dplyr)
+#library(PerformanceAnalytics)
+library(ggplot2)
+library(stringr)
+library(naniar)
+```
+
+
+
+```{r Import, include=FALSE}
+testing <- read_excel("testing.xlsx")
+head(testing)
+
+
+clean <- testing %>%
+  mutate(real_trial = ifelse(is.na(trial), 1, as.numeric(trial) +1),  #depends on block num too
+         end_trial = ifelse(block < 1.5, real_trial, ifelse(block < 3.5, real_trial + 50, real_trial+100))
+         )
+View(clean)
+```
+
+```{r Cleaning, include=FALSE}
+
+```
+
+```{r Visualization}
+
+```
+
+```{r Output, include=FALSE}
+
+#write.csv(pv_only_short,"/Users/xiaoma/Box/Self-report/", row.names = TRUE)
+
+```
+
