@@ -32,39 +32,44 @@ Part 1: To-do list
 #install.packages("tidyverse")
 #install.packages("stringr")
 #install.packages("naniar")
+#install.packages("xlsx")
 
 library(dplyr)
 #library(PerformanceAnalytics)
 library(ggplot2)
 library(stringr)
 library(naniar)
+library(readxl)
+# Write the first data set in a new workbook
+write.xlsx(clean, file = "myworkbook.xlsx",
+      sheetName = "USA-ARRESTS", append = FALSE)
 ```
 
 
 
 ```{r Import, include=FALSE}
-testing <- read_excel("testing.xlsx")
+testing <- read_excel("/Users/xiaoma/Documents/PVDM_office/yeekeh/f_209_1.xlsx")
 head(testing)
-
+#need to rename the file, so that trial is not repeatedly used
+#maybe python can call and run R script?
+#need to output the file too
 
 clean <- testing %>%
-  mutate(real_trial = ifelse(is.na(trial), 1, as.numeric(trial) +1),  #depends on block num too
-         end_trial = ifelse(block < 1.5, real_trial, ifelse(block < 3.5, real_trial + 50, real_trial+100))
-         )
-View(clean)
-```
-
-```{r Cleaning, include=FALSE}
-
-```
-
-```{r Visualization}
-
+  mutate(sep_trial = 
+           ifelse(!is.na(trial), as.numeric(trial) +1, 
+           ifelse(block < 2.5, 1, 51)),  #depends on block num too
+         real_trial = 
+           ifelse(block < 1.5, sep_trial, 
+           ifelse(block < 2.5, sep_trial + 51, 
+           ifelse(block < 3.5, sep_trial + 52, sep_trial+103)))
+         ) %>%
+  select(sub, block, Btype, real_trial, img1, img2, RESP, RT)
+#View(clean)
 ```
 
 ```{r Output, include=FALSE}
 
-#write.csv(pv_only_short,"/Users/xiaoma/Box/Self-report/", row.names = TRUE)
+write.csv(clean,"/Users/xiaoma/Documents/PVDM_office/yeekeh/f_209_1_output.xlsx", row.names = TRUE)
 
 ```
 
